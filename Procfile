@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn recent_spotifies.wsgi
+web: gunicorn recent_spotifies.wsgi --logfile=-

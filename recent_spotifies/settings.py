@@ -19,7 +19,7 @@ AUTH_USER_MODEL = "authentication.User"
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-if os.getenv('LOCAL') is None:
+if os.getenv('SECURE_SSL_REDIRECT') is not None:
     SECURE_SSL_REDIRECT = True
 
 
@@ -29,9 +29,6 @@ SECURE_HSTS_PRELOAD = True
 
 ALLOWED_HOSTS = [
     '.herokuapp.com',
-     'backend-python-628fg56hb2.herokuapp.com',
-     'backend-python.herokuapp.com',
-     'backend-python*.herokuapp.com',
      '127.0.0.1',
      ]
 
@@ -47,7 +44,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-if os.getenv('LOCAL') is not None:
+if os.getenv('DEBUG') is not None:
     DEBUG = True
 else:
     DEBUG = False
@@ -107,12 +104,25 @@ WSGI_APPLICATION = 'recent_spotifies.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('LOCAL') is not None:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd6ouopj9r2mbc4',
+            'USER': 'uc5erc3dbekjmt',
+            'PASSWORD': 'pc0a292ff4d46f963e5e07e44a32d33a035599f9b9ef97ac7f254844181070b8a',
+            'HOST': 'c9pv5s2sq0i76o.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
+            'PORT': '5432'
+
+        }
+    }
 
 if 'DATABASE_URL' in os.environ:
     import dj_database_url
