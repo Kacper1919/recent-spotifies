@@ -14,7 +14,11 @@ from django.views import generic
 from .models import User
 
 SPOTIFY_API_TOKEN_SCOPES = "playlist-read-private user-library-read playlist-modify-public user-read-recently-played user-top-read"
-SPOTIFY_OAUTH_REDIRECT_URI = "http://127.0.0.1:8000/oauth-callback"
+
+if os.getenv('LOCAL') is not None:
+    SPOTIFY_OAUTH_REDIRECT_URI = "http://127.0.0.1:8000/oauth-callback"
+else:
+    SPOTIFY_OAUTH_REDIRECT_URI = 'https://recent-spotifies-e7f2016e24ae.herokuapp.com/oauth-callback'
 
 SPOTIFY_API_CLIENT_ID = os.environ.get('SPOTIFY_API_CLIENT_ID')
 SPOTIFY_API_CLIENT_SECRET = os.environ.get('SPOTIFY_API_CLIENT_SECRET')
