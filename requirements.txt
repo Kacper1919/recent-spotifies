@@ -11,6 +11,7 @@ distlib==0.3.9
 Django==5.1.7
 django-debug-toolbar==5.1.0
 django-mathfilters==1.0.0
+dj-database-url
 ecdsa==0.19.1
 filelock==3.18.0
 gunicorn==23.0.0
