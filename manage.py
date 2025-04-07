@@ -7,7 +7,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    load_dotenv()
+    #load_dotenv()
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'recent_spotifies.settings')
     try:
         from django.core.management import execute_from_command_line
