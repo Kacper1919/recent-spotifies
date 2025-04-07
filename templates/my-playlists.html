@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="album py-3 bg-light container">
+    <div class="row row-cols-1 row-cols-md-5 g-5">
+        <div class="col">
+            <div class="card shadow-sm card-addon">
+                <img
+                    class="card-img-top"
+                    src="{% static 'images/liked-songs-300.jpg' %}"
+                    width="200"
+                    height="200"
+                />
+                <div class="card-body">
+                    <a class="stretched-link text-decoration-none link-dark" href="{% url 'playlist_favourites' user.spotify_id %}"></a>
+                    <h5 class="card-title">Favourite Tracks</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-sm card-addon">
+                <img
+                    class="card-img-top"
+                    src="{% static 'images/recently-played-300.jpg' %}"
+                    width="200"
+                    height="200"
+                />
+                <div class="card-body">
+                    <a class="stretched-link text-decoration-none link-dark" href="{% url 'playlist_recently_played' user.spotify_id %}"></a>
+                    <h5 class="card-title">Recently Played</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="album py-3 bg-light container">
+    <div class="row row-cols-1 row-cols-md-5 g-5">
+        {% for playlist in playlist_list %}
+        <div class="col">
+            <div class="card shadow-sm card-addon">
+                <img
+                    class="card-img-top"
+                    src="{{ playlist.image_url }}"
+                    width="200"
+                    height="200"
+                />
+                <div class="card-body">
+                    <h5 class="card-title">{{ playlist.name }}</h5>
+                    <p class="card-text" >{{ playlist.owner_name }}</p>
+                    <a class="stretched-link text-decoration-none link-dark" href="{% url 'playlist' playlist.spotify_id %}"></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

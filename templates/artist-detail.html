@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class='container rows-cols mx-auto'>
+    <div class="row shadow rounded-5 p-3 mx-4 my-3 panel-bg">
+        <div class='row'>
+            <div class='col-auto'>
+                <img class="rounded-3 shadow" src="{{ artist.image_url }}" width="300" height="300">
+            </div>
+            <div class='col-sm'>
+                <div class="row my-5 text-start">
+                    <h1 class="display-5 fw-bold text-body-emphasis">{{ artist.name }}</h1>
+                    {% for genre in artist.artistgenre_set.all %}
+                    <p>{{ genre.genre }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row shadow rounded-5 p-3 mx-4 my-3 panel-bg">
+        {% for track_artist in artist.trackartist_set.all %}
+                <div class="gap-x-5 my-1 row cols">
+                    <div class="col-auto"><img class="rounded" src="{{ track_artist.track.image_url }}" width="40" height="40"></div>
+                    <a class="col-sm-2 mx-4 my-auto text-nowrap overflow-hidden  text-decoration-none link-body-emphasis" href="{% url 'track_detail' track_artist.track.spotify_id %}">{{ track_artist.track.name }}</a>
+                    <div class="col-auto mx-4 my-auto text-nowrap overflow-hidden">
+                        {% for track_artist2 in track_artist.track.trackartist_set.all %}
+                        {% if forloop.counter0 > 1 %}
+                        , 
+                        {% endif %}
+                        <a class='text-decoration-none link-body-emphasis' href="{% url 'artist_detail' track_artist2.artist.spotify_id %}">
+                        {{ track_artist2.artist.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            <hr class="border-gray-450 py-1 my-1">
+            {% endfor %}
+    </div>
+    {% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class='container rows-cols mx-auto'>
+    <div class="row">
+        <div class='col-lg shadow rounded-5 p-3 mx-4 my-3 panel-bg'>
+            <div class='row'>
+                <div class='col-auto'>
+                    <img class="rounded-3 shadow" src="{{ track.image_url }}" width="300" height="300">
+                </div>
+                <div class='col-sm'>
+                    <div class="row my-5 text-start">
+                        <h1 class="display-5 fw-bold text-body-emphasis">{{ track.name }}</h1>
+                        {% for track_artist in track.trackartist_set.all %}
+                        <p><a class='text-decoration-none link-body-emphasis' href="{% url 'artist_detail' track_artist.artist.spotify_id %}">{{ track_artist.artist.name }}</p>
+                        {% endfor %}
+                        <br>
+                        {% for genre in track.get_genres %}
+                        <p>{{ genre }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

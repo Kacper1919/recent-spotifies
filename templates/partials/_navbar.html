@@ -1,0 +1,93 @@
+{% load static %}
+
+<div class="navbar navbar-expand-md fixed-top bg-dark px-5">
+
+    <div class="me-lg-auto text-white ">
+      <img
+        class="bi me-2"
+        src="{% static 'images/logo.png' %}"
+        width="40"
+        height="40"
+      />
+      Recent Spotifies
+    </div>
+
+    <ul class="nav me-lg-auto justify-content-center">
+      <li>
+        <a
+          href="{% url 'index' %}"
+          class="nav-link px-2 text-white"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          {% if user.is_authenticated %}
+          class="nav-link px-2 text-white"
+          href="{% url 'my_playlists' %}"
+          {% else %}
+          class="nav-link px-2 text-secondary"
+          {% endif %}
+        >
+          My playlists
+        </a>
+      </li>
+
+      <li>
+        <a
+          {% if user.is_authenticated %}
+          class="nav-link px-2 text-white"
+          href="{% url 'my_top_items' %}"
+          {% else %}
+          class="nav-link px-2 text-secondary"
+          {% endif %}
+        >
+          My Top Items
+        </a>
+      </li>
+    </ul>
+
+    {% if not user.is_authenticated %}
+    <div class="text-end">
+      <a
+        class="btn btn-light me-2"
+        href="{% url 'login_with_spotify' %}"
+      >
+        Login With Spotify
+      </a>
+    </div>
+    {% else %}
+    <div class="dropdown text-end dark">
+      <span class="badge rounded-pill text-bg-light">
+        <a
+          href=""
+          class="d-block link-dark text-decoration-none dropdown-toggle bs-dark fs-6 mt-1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          {{ user.username }}
+          <img
+            src="{{ user.image_url }}"
+            alt=""
+            width="30"
+            height="30"
+            class="rounded-circle"
+          />
+        </a>
+        <ul class="dropdown-menu text-small">
+          <li><a class="dropdown-item" href="#">New project...</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <a
+              class="dropdown-item"
+              href="{% url 'log_out' %}"
+              >Log out</a
+            >
+          </li>
+        </ul>
+      </span>
+    </div>
+    {% endif %}
+  </div>

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+
+{% block content %}
+<div class='container rows-cols mx-auto'>
+    <div class="row">
+        <div class='col-sm-3 shadow rounded-5 p-3 mx-4 my-3 panel-bg'>
+            <div class="row mb-5">
+                <p class="col fs-3 text-dark my-auto">Top Artists</p>
+                <div class="col dropdown dark my-auto">
+                    <button
+                        class="btn btn-dark rounded-pill dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                    {{ artists_time_range_text }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item{% if artists_time_range == 'short_term' %} active{% endif %}" href="?artists_time_range=short_term">1 Month</a></li>
+                        <li><a class="dropdown-item{% if artists_time_range == 'medium_term' %} active{% endif %}" href="?artists_time_range=medium_term">6 Months</a></li>
+                        <li><a class="dropdown-item{% if artists_time_range == 'long_term' %} active{% endif %}" href="?artists_time_range=long_term">12 Months</a></li>
+                    </ul>
+                </div>
+            </div>
+            {% for top_artist in topartist_list %}
+            <a class="text-decoration-none link-body-emphasis flex gap-x-4" href="{% url 'artist_detail' top_artist.artist.spotify_id %}">
+                <div class="gap-x-5 my-1 row">    
+                    <div class="col-auto"><img class="rounded" src="{{ top_artist.artist.image_url }}" width="40" height="40"/></div>
+                    <div class="col mx-4 my-auto overflow-hidden">{{ top_artist.artist.name }}</span></div> 
+                </div>
+            </a>
+            <hr class="border-gray-450 py-1 my-1">
+            {% endfor %}
+        </div>
+        <div class='col-sm-4 shadow rounded-5 p-3 my-3 mx-4 panel-bg'>
+            <div class="row mb-5">
+                <p class="col fs-3 text-dark my-auto">Top Tracks</p>
+                <div class="col dropdown dark my-auto">
+                    <button
+                        class="btn btn-dark rounded-pill dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                    {{ tracks_time_range_text }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item{% if tracks_time_range == 'short_term' %} active{% endif %}" href="?tracks_time_range=short_term">1 Month</a><li>
+                        <li><a class="dropdown-item{% if tracks_time_range == 'medium_term' %} active{% endif %}" href="?tracks_time_range=medium_term">6 Months</a><li>
+                        <li><a class="dropdown-item{% if tracks_time_range == 'long_term' %} active{% endif %}" href="?tracks_time_range=long_term">12 Months</a><li>
+                    </ul>
+                </div>
+            </div>
+            {% for top_track in toptrack_list %}
+            <a class="text-decoration-none link-body-emphasis gap-x-4" href="{% url 'track_detail' top_track.track.spotify_id %}">
+                <div class="gap-x-5 my-1 row">
+                    <div class="col-auto"><img class="rounded" src="{{ top_track.track.image_url }}" width="40" height="40"></div>
+                    <div class="col mx-4 my-auto text-nowrap overflow-hidden">{{ top_track.track.name }}</div>
+                </div>
+            </a>
+            <hr class="border-gray-450 py-1 my-1">
+            {% endfor %}
+        </div>
+        <div class='col-sm-3 shadow rounded-5 p-3 my-3 mx-4 panel-bg'>
+            <div class="row mb-5">
+                <p class="col fs-3 text-dark my-auto">Top Genres by Tracks</p>
+            </div>
+            <div class="row mx-1 my-0 py-0">
+                {% for genre, value in genres.items %}
+                <a class="text-decoration-none link-dark gap-x-4" >
+                    <div class="row progress my-1" style="height: 40px;">
+                        <p class='mx-4 my-0 py-0 fs-5'>
+                            {{ genre }}
+                        </p>
+                        <div class="progress-bar" role="progressbar" style="width: {{ value|div:max_genre|mul:100 }}%" aria-valuenow="{{ value|div:max_genre|mul:100 }}" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

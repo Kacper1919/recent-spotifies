@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5 my-0 align-items-center text-center shadow-lg panel-bg rounded-3">
+    <div class="row">
+        <div class="col-auto px-5">
+            <img class="rounded-3 shadow" src="{{ playlist.image_url }}" width="300" height="300">
+        </div>
+        <div class="col container position-relative">
+            <div class="row my-5 text-start">
+                <h1 class="display-5 fw-bold text-body-emphasis">{{ playlist.name }}</h1>
+                <p>{{ playlist.owner_name }}</p>
+            </div>
+            <div class='position-absolute bottom-0 start-0 w-50'>
+                
+                <form class="container col-lg-4 align-items-start row" action="{% url 'refresh_playlist_tracks' playlist.spotify_id %}" method='post'>
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-dark text-white btn-lg px-4 gap-3">Refresh</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex px-4 py-4 my-4">
+    <div class="container p-4 border shadow-lg align-items-center justify-content-center panel-bg rounded-3">
+
+        <div class="float-end">
+            {% include './partials/_paginator.html' %}
+        </div>
+
+        <table class="container table-sm">
+            <thead>
+                <tr>
+                    <th class="th-lg">name</th>
+                    <th class="th-lg">artists</th>
+                    <th class="th-lg">
+                        {% if playlist.type == 'recently_played' %}
+                        played at
+                        {% else %}
+                        added at
+                        {% endif %}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% timezone "Europe/Paris" %}
+                {% for playlist_track in playlisttrack_list %}
+                <tr>
+                    <td><a class="text-decoration-none link-body-emphasis" href="{% url 'track_detail' playlist_track.track.spotify_id %}">{{ playlist_track.track.name }}</a></td>
+                    <td><div>
+                        {% for track_artist in playlist_track.track.trackartist_set.all %}
+                        {% if forloop.counter0 > 1 %}
+                        , 
+                        {% endif %}
+                        <a class='text-decoration-none link-body-emphasis' href="{% url 'artist_detail' track_artist.artist.spotify_id %}">
+                        {{ track_artist.artist.name }}
+                        </a>
+                        {% endfor %}
+                    </div></td>
+                    <td><div>{{ playlist_track.added_played_at|date:'r' }}</div></td>
+                </tr>
+                {% endfor %}
+                {% endtimezone %}
+            </tbody>
+        </table>
+
+        <div class="float-end">
+            {% include './partials/_paginator.html' %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

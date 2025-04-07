@@ -1,0 +1,45 @@
+<ul class="pagination pagination-sm">
+    {% if page_obj.has_previous %}
+        <li >
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        {% if page_obj.number >= 5 %}
+            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            {% if page_obj.number >= 7 %}
+                <li class="page-item"><a class="page-link">...</a></li>
+            {% elif page_obj.number == 6 %}
+                <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% for i in page_obj.paginator.page_range %}
+        {% if i == page_obj.number %}
+            {% if page_obj.has_other_pages %}
+                <li class="page-item"><a class="page-link active">{{ page_obj.number }}</a></li>
+            {% endif %}
+        {% elif page_obj.number|add:'-3' <= i  and i <= page_obj.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        {% if page_obj.number <= page_obj.paginator.num_pages|add:'-4' %}
+            {% if page_obj.number <= page_obj.paginator.num_pages|add:'-6'%}
+                <li class="page-item"><a class="page-link">...</a></li>
+            {% elif page_obj.number == page_obj.paginator.num_pages|add:'-5' %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages|add:'-1' }}">{{ page_obj.paginator.num_pages|add:'-1' }}</a></li>
+            {% endif %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+            {% endif %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    {% endif %}
+</ul>
