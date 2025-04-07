@@ -1,0 +1,41 @@
+.pagination > li {
+    --bs-pagination-bg:rgba(0, 0, 0, 0.041);
+    --bs-pagination-active-bg:rgb(49, 49, 49);  
+    --bs-pagination-color: rgb(49, 49, 49);
+    --bs-pagination-hover-color: rgb(34, 34, 34);
+    --bs-pagination-hover-bg: rgba(0, 0, 0, 0.24);
+    --bs-pagination-active-border-color: #4b4b4b;
+    --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(190, 190, 190, 0.25);
+    --bs-pagination-focus-color: rgb(10, 10, 10);
+}
+
+.card:hover{
+    background: #e7e7e7;
+}
+
+.table-sm > tbody > tr > td {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.table-sm > tbody > tr > td > div {
+    max-width: 30rem;
+    font-size: 15px;
+    max-height: 24px;
+    overflow: hidden;
+}
+
+.table-sm > tbody > tr > td > img {
+    margin: 3px;
+}
+
+.no-overflow > span {
+    text-wrap: nowrap;
+    overflow: hidden;
+}
+
+.panel-bg {
+    background-color: #f0f0f0 ;
+}
+
+.table_custom { --bs-table-bg: transparent !important; }
