@@ -34,7 +34,7 @@ def get_save_my_playlists(user: User):
 
     return playlists
 
-def update_playlist_tracks(user: User, playlist: models.Playlist, offset=0, calls_limit=5):
+def update_playlist_tracks(user: User, playlist: models.Playlist, offset=0, calls_limit=2):
     if playlist.type == 'playlist':
         next_url = f'https://api.spotify.com/v1/playlists/{playlist.spotify_id}/tracks'
     elif playlist.type == 'favourites':

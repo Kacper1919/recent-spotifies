@@ -26,9 +26,14 @@ class Artist(models.Model):
         try:
             artist.popularity = int(artist_data['popularity'])
             artist.followers = int(artist_data['followers']['total'])
+        except KeyError: pass
+
+        try:
             for genre_name in artist_data['genres']:
-                genre = ArtistGenre(artist=artist, genre=genre_name)
-                artist.temporary_genres_to_save.append(genre)
+                try: ArtistGenre.objects.get(artist=artist, genre=genre_name)
+                except ArtistGenre.DoesNotExist:
+                    genre = ArtistGenre(artist=artist, genre=genre_name)
+                    artist.temporary_genres_to_save.append(genre)
         except KeyError:
             pass
 
