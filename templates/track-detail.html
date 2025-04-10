@@ -12,11 +12,11 @@
                     <div class="row my-5 text-start">
                         <h1 class="display-5 fw-bold text-body-emphasis">{{ track.name }}</h1>
                         {% for track_artist in track.trackartist_set.all %}
-                        <p><a class='text-decoration-none link-body-emphasis' href="{% url 'artist_detail' track_artist.artist.spotify_id %}">{{ track_artist.artist.name }}</p>
+                        <p><a class='text-decoration-none link-body-emphasis' href="{% url 'artist_detail' track_artist.artist.spotify_id %}">{{ track_artist.artist.name }}</a></p>
                         {% endfor %}
                         <br>
                         {% for genre in track.get_genres %}
-                        <p>{{ genre }}
+                        <p>{{ genre.genre }}</P>
                         {% endfor %}
                     </div>
                 </div>

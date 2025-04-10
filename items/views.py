@@ -112,11 +112,11 @@ class MyTopItemsView(LoginRequiredMixin, generic.ListView):
         genres = {}
         for top_track in top_tracks:
             for track_artist in top_track.track.trackartist_set.all():
-                    for artist_genre in track_artist.artist.artistgenre_set.all():
-                        if artist_genre.genre in genres.keys():
-                            genres[artist_genre.genre] += 1
+                    for genre in models.Genre.objects.filter(artists__pk=track_artist.artist.pk):
+                        if genre.genre in genres.keys():
+                            genres[genre.genre] += 1
                         else:
-                            genres[artist_genre.genre] = 1
+                            genres[genre.genre] = 1
         
         sorted_genres = {k: v for k, v in sorted(genres.items(), key=lambda item: item[1], reverse=True)}
         try:

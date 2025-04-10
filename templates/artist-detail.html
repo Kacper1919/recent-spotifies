@@ -10,7 +10,7 @@
             <div class='col-sm'>
                 <div class="row my-5 text-start">
                     <h1 class="display-5 fw-bold text-body-emphasis">{{ artist.name }}</h1>
-                    {% for genre in artist.artistgenre_set.all %}
+                    {% for genre in artist.genre_set.all %}
                     <p>{{ genre.genre }}</p>
                     {% endfor %}
                 </div>

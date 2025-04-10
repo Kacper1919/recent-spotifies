@@ -16,49 +16,37 @@ class Artist(models.Model):
     popularity = models.IntegerField(null=True)
     followers = models.IntegerField(null=True)
 
-    temporary_genres_to_save = []
-
     @classmethod
     def from_json(cls, artist_data):
-        artist = cls(spotify_id = artist_data['id'], name = artist_data['name'])
+        artist = cls(
+            spotify_id = artist_data['id'],
+            name = artist_data['name'],
+        )
         artist.image_url = parsers.image_url(artist_data)
 
-        try:
-            artist.popularity = int(artist_data['popularity'])
-            artist.followers = int(artist_data['followers']['total'])
+        try: artist.popularity = int(artist_data['popularity'])
         except KeyError: pass
 
-        try:
-            for genre_name in artist_data['genres']:
-                try: ArtistGenre.objects.get(artist=artist, genre=genre_name)
-                except ArtistGenre.DoesNotExist:
-                    genre = ArtistGenre(artist=artist, genre=genre_name)
-                    artist.temporary_genres_to_save.append(genre)
-        except KeyError:
-            pass
+        try: artist.followers = int(artist_data['followers']['total'])
+        except KeyError: pass
 
         return artist
 
+    def update_genres_from_json(self, artist_data):
+        for genre_name in artist_data['genres']:
+            genre, created = Genre.objects.get_or_create(genre=genre_name)
+            genre.artists.add(self)
 
-    def save(self, *args, force_insert=False, force_update=False, using=None, update_fields=None,):
-        super(Artist, self).save(*args, force_insert, force_update, using, update_fields)
 
-        [genre.save() for genre in self.temporary_genres_to_save]
-        self.temporary_genres_to_save = None
-    
     def __str__(self):
         return self.name
 
-class ArtistGenre(models.Model):
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
-    genre = models.CharField(max_length=60)
-
-    class Meta:
-        unique_together = ('artist', 'genre',)
+class Genre(models.Model):
+    genre = models.CharField(max_length=60, unique=True, primary_key=True)
+    artists = models.ManyToManyField(Artist)
 
     def __str__(self):
-        return self.artist.name + " - " + self.genre
-
+        return self.genre
 
 class Track(models.Model):
     spotify_id = models.CharField(max_length=30, unique=True, primary_key=True)
@@ -137,12 +125,12 @@ class Track(models.Model):
         return self.name
     
     def get_genres(self):
-        genres = []
+        genres = Genre.objects.none()
         for track_artist in self.trackartist_set.all():
-            for genre in track_artist.artist.artistgenre_set.all():
-                genres.append(genre.genre)
+            genres |= track_artist.artist.genre_set.all()
+            print('smth')
 
-        return tuple(genres)
+        return genres
 
 class TrackArtist(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
@@ -275,10 +263,7 @@ class TopArtist(models.Model):
         return top_artist
 
     def save(self, *args, force_insert=False, force_update=False, using=None, update_fields=None):
-        try:
-            if len(self.artist.temporary_genres_to_save) > Artist.objects.get(pk=self.artist.pk).artistgenre_set.count():
-                self.artist.save()
-        except Artist.DoesNotExist: self.artist.save()
+        self.artist.save()
         super().save(force_insert, force_update, using, update_fields)
 
 class TopTrack(models.Model):

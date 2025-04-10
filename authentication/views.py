@@ -74,6 +74,10 @@ def oauth_callback(request):
     }
     token_response = requests.post(
         TOKEN_URI, headers=headers, data=body, json=True)
+    
+    if token_response.status_code != 200:
+        raise Http404(token_response.text)
+    
 
     token = token_response.json()
     access_token = token['access_token']

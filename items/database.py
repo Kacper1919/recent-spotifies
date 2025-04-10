@@ -95,6 +95,7 @@ def update_top_artists(user: models.User, time_range='medium_term', calls_limit=
         for artist_data in data['items']:
             top_artist = models.TopArtist.from_json(user, artist_data, time_range)
             top_artist.save()
+            top_artist.artist.update_genres_from_json(artist_data)
 
 def update_artist_image_urls(user, some_artist_query):
     artist_to_get_ids = []
