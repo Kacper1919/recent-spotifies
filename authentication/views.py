@@ -85,7 +85,10 @@ def oauth_callback(request):
     ) + datetime.timedelta(seconds=int(token['expires_in']))
 
     user_profile_response = requests.get(
-        'https://api.spotify.com/v1/me', headers={'Authorization': 'Bearer %s' % access_token})
+        'https://api.spotify.com/v1/me', 
+        headers={'Authorization': 'Bearer %s' % access_token}
+    )
+    user_profile_response.raise_for_status()
     user_profile = user_profile_response.json()
     spotify_id = user_profile['id']
 
