@@ -95,7 +95,6 @@ def oauth_callback(request):
         user = User.objects.create_user(
             username=user_profile['display_name'],
             spotify_id=spotify_id,
-            image_url=user_profile['images'][1]['url'],
             user_uri=user_profile["href"],
             spotify_type=user_profile['type'],
             access_token=token['access_token'],
@@ -104,6 +103,10 @@ def oauth_callback(request):
             refresh_token=token['refresh_token'],
             token_scope=token['scope']
             )
+        
+        try: user.image_url=user_profile['images'][1]['url']
+        except KeyError: pass
+
 
     login(request, user)
 

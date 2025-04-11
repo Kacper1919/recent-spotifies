@@ -6,9 +6,10 @@ from django.utils import timezone
 
 class User(AbstractUser):
     spotify_id = models.CharField(max_length=40, unique=True)
-    image_url = models.URLField(max_length=360)
     user_uri = models.URLField(max_length=360)
     spotify_type = models.CharField(max_length=50)
+
+    image_url = models.URLField(max_length=360, null=True)
 
     access_token = models.CharField(max_length=360)
     token_type = models.CharField(max_length=30)
